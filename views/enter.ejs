@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+
+    <title> entering form || real-time conversation</title>
+</head>
+<body>
+    <div class="container vh-100 d-flex justify-content-center align-items-center h-100">
+        <div class = "w-50">
+            <div class="inputbox">
+                <label class="form-label">ROOM ID</label>
+                <input type="text" class="form-control" id="roomId" placeholder="방 번호를 입력하세요.">
+                <div id="invalid-feedback-room" style="display: none; color: brown;">
+                    존재하지 않는 방 번호입니다.
+                </div>
+            </div>
+            <div class="inputbox">
+                <label class="form-label">NICKNAME</label>
+                <input type="text" class="form-control" id="nickname" placeholder="채팅방에서 표시될 이름을 입력하세요.">
+                <div id="invalid-feedback-nickname" style="display: none; color: brown;">
+                    이미 존재하는 이름입니다.
+                </div>
+            </div>
+            <button class="btn btn-primary mt-2" id="enterBtn" onclick="enter()">입장!</button>
+        </div>
+    </div>
+    <script src="/javascripts/lib/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/enter.js"></script>
+</body>
+</html>

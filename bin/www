@@ -1,0 +1,79 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('realtime:server');
+var server = require('http').Server(app);
+
+var func = require('../controllers/chat.js');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+// 새로 추가해 주었다!
+const io = require('socket.io')(server);
+
+// 새로 추가한 거 !
+io.on('connection', (socket) => {
+  console.log('새로운 사용자가 연결되었습니다.');
+
+  // 입장
+  socket.on('joinRoom', (roomId, nickname) => {
+    socket.join(roomId);
+    console.log("입장입장 ", roomId, ", ",nickname);
+    io.to(roomId).emit('joinRoom', roomId, nickname);
+  });
+
+  // 퇴장
+  socket.on('leaveRoom', (roomId, nickname) => {
+    func.leave(roomId, nickname);
+    socket.leave(roomId);
+    console.log("퇴장퇴장 : ", nickname);
+    io.to(roomId).emit('leaveRoom', roomId, nickname);
+  });
+
+  // 클라이언트쪽에서 보낸 메시지 수신
+  socket.on('chat message', (roomId, nickname, message) => {
+      func.insertMessage(roomId, nickname, message)
+      console.log('수신 메시지 ) ',nickname," : ", message);
+      io.to(roomId).emit('chat message', nickname, message); // 모두에게 전송
+  });
+
+  // 연결 종료
+  socket.on('disconnect', async() => {
+      console.log('연결 끊김...');
+  });
+
+});
+
+server.listen(port);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+  return false;
+}
+
