@@ -18,7 +18,6 @@ $(function() {
         type : "GET",
         url : `/initial?roomId=${roomId}`,
         success: function(data){
-            console.log(data);
             initial(data);
         },
         // 없을 경우
@@ -30,6 +29,7 @@ $(function() {
 
     socket.on('joinRoom', (roomId, name) => {
         addSystemChat(name+'님이 들어왔습니다!');
+        scrollBottom();
     });
 
     socket.on('chat message', (name, msg) => {
@@ -41,12 +41,22 @@ $(function() {
          else {
             addOtherChat(name, msg);
          }
+        scrollBottom();
     });
 
     socket.on('leaveRoom', (roomId, name) => {
         $('#chattingList').append($('<li>').text(name + '님이 퇴장하였습니다.'));
-        
         //addSystemChat(nickname+'님이 나갔습니다.');
+    });
+
+
+    $("#inputMsg").keydown(function (key) {
+        var msg = $('#inputMsg').val();
+        if (key.keyCode == 13) {
+            if(msg != '') {
+                send();
+            }
+        }
     });
 })
 
@@ -70,14 +80,11 @@ function initial(data) {
     }
 }
 
-
+// 내 채팅 추가
 function addMyChat(nickname, msg) {
     
-    var container = $('<li>')
-
-
+    var container = $('<li>');
     var box = $('<div>').attr('class', 'myContainer');
-
     var nicknameSpan = $('<div>')
                         .attr('class', "myNickname")
                         .text(nickname);
@@ -91,10 +98,10 @@ function addMyChat(nickname, msg) {
     $('#chattingList').append(container);
 }
 
+// 다른 사람 채팅 추가
 function addOtherChat(nickname, msg) {
 
     var container = $('<li>');
-
     var box = $('<div>').attr('class', 'otherContainer');
     var nicknameSpan = $('<div>')
                         .attr('class', "otherNickname")
@@ -110,6 +117,7 @@ function addOtherChat(nickname, msg) {
     $('#chattingList').append(container);
 }
 
+// 시스템 메시지 추가
 function addSystemChat(msg) {
 
     var container = $('<li>').attr('class', 'systemContainer');
@@ -121,3 +129,8 @@ function addSystemChat(msg) {
     $('#chattingList').append(container);
 }
 
+
+
+function scrollBottom(){
+    $('#chattingScroll').scrollTop($('#chattingScroll')[0].scrollHeight);
+}
