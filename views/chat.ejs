@@ -10,9 +10,9 @@
 
 <body>
     <div class="container-fluid vh-100 bg-light">
-        <div class="bg-primary rounded-pill col first-section d-flex justify-content-center align-items-center" style="height: 7%;">
+        <div class="bg-primary rounded-pill col first-section d-flex space-between align-items-center" style="height: 7%;">
             <span class = "fw-bold text-white" id="roomId"> <%= roomId %> </span>
-            <span id="nickname" style="display: none;"> <%= nickname %> </span>
+            <button id="exitBtn" class="btn btn-light btn-sm" onclick="exit()">나가기</button>
         </div>
         <!--채팅 목록-->
         <div id="chattingScroll" class="col second-section" style="height: 83%; overflow-y: scroll;">

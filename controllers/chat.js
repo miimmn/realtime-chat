@@ -4,9 +4,9 @@ var bodyParser = require("body-parser");
 // app.use(bodyParser.urlencoded({extended: false}));
 
 
-var roomList = {};
-var userList = {};
-var msgList = {};
+var roomList = {}; // 방 인원 수
+var userList = {}; // 방에 있는 유저
+var msgList = {}; // 방에 있는 메시지
 
 
 // ------생성---------------------------------------------------------------------------------------------------------------
@@ -93,7 +93,14 @@ exports.leave = function(roomId, nickname) {
 
     // 닉네임 목록에서 빼기
     var find = userList[roomId].indexOf(nickname)
-    userList.splice(find,1);
+    userList[roomId].splice(find,1);
+
+    // 0명이 됐을 경우 방 폭파
+    if (Object.keys(userList[roomId]).length == 0) {
+        delete roomList[roomId];
+        delete userList[roomId];
+        delete msgList[roomId];
+    }
 }
 
 

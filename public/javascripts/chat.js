@@ -45,8 +45,7 @@ $(function() {
     });
 
     socket.on('leaveRoom', (roomId, name) => {
-        $('#chattingList').append($('<li>').text(name + '님이 퇴장하였습니다.'));
-        //addSystemChat(nickname+'님이 나갔습니다.');
+        addSystemChat(nickname+'님이 나갔습니다.');
     });
 
 
@@ -129,8 +128,14 @@ function addSystemChat(msg) {
     $('#chattingList').append(container);
 }
 
-
-
+// 채팅 제일 밑으로 (최신 메시지로)
 function scrollBottom(){
     $('#chattingScroll').scrollTop($('#chattingScroll')[0].scrollHeight);
+}
+
+
+// 채팅방 나가기
+function exit(){
+    socket.emit('leaveRoom', roomId, nickname);
+    location.href = '/'; // 메인으로 이동
 }
