@@ -26,7 +26,7 @@ exports.makeChattingRoom = function(req, res) {
     // 이미 존재하는 방 번호인지
     if( Object.keys(roomList).includes(roomId)) {
         // res.json({ message : "EXIST"});
-        res.status(500);
+        res.status(500).json({ message : "DUP ROOM"});
     }
     else {
         roomList[roomId] = 1;
