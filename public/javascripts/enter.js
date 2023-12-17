@@ -18,11 +18,13 @@ function enter() {
 
             // 방이 없는 거면...
             if(errorMsg == 'NOT EXIST') {
+                $('#invalid-feedback-nickname').hide();
                 $('#invalid-feedback-room').show();
             }
 
             // 닉네임 중복인 거면...
             else if (errorMsg == 'DUP NICKNAME') {
+                $('#invalid-feedback-room').hide();
                 $('#invalid-feedback-nickname').show();
             }
         }
